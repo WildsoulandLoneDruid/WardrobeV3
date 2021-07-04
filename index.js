@@ -11,7 +11,7 @@ const saltRounds = 10;
 const middlewares = require('./middlewares');
 const logs = require('./server/api/logs');
 const credentials = require('./server/api/credentials');
-//const updateDB = require('./api/updateDB');
+const updateDB = require('./server/api/updateDB');
 
 const app = express();
 
@@ -34,8 +34,8 @@ app.get('/', (res, req) => {
 });
 
 app.use('/api/logs', logs);
-//app.use('/api/credentials', credentials);
-//app.use('/api/updateDB', updateDB);
+app.use('/api/credentials', credentials);
+app.use('/api/updateDB', updateDB);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
