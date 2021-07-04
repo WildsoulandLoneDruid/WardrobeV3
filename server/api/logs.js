@@ -12,7 +12,6 @@ router.get('/', async(req, res, next) => {
         next(error);
     }
 });
-
 router.get('/getSpecificWardrobe', async(req, res, next) => {
     try {
         const {
