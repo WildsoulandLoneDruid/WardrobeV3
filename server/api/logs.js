@@ -17,11 +17,12 @@ router.get('/getSpecificWardrobe', async(req, res, next) => {
     try {
         const {
             id_,
-            wardrobeid_,
+            wardrobe_id,
         } = req.body;
+        console.log('testy');
         const articleEntry = await UserEntry.find({
-            'id_': id_,
-            'wardrobeData.id': wardrobeid_,
+            '_id': id_,
+            'wardrobeData._id': wardrobe_id,
         }).exec(function(err, docs) {
             if (err) {
                 next(err);
@@ -30,7 +31,6 @@ router.get('/getSpecificWardrobe', async(req, res, next) => {
             }
         })
     } catch (error) {
-        res.status(422);
         next(error);
     }
 });
@@ -43,7 +43,6 @@ router.post('/', async(req, res, next) => {
         res.json(createdEntry);
     } catch (error) {
         if (error.name === 'Validation Error') {
-            res.status(422);
         }
         next(error);
     }

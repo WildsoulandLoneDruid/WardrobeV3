@@ -10,7 +10,7 @@ const saltRounds = 10;
 //fuck this 
 const middlewares = require('./middlewares');
 const logs = require('./server/api/logs');
-//const credentials = require('./api/credentials');
+const credentials = require('./server/api/credentials');
 //const updateDB = require('./api/updateDB');
 
 const app = express();
