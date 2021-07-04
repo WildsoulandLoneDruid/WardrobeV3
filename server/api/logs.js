@@ -18,7 +18,7 @@ router.get('/getSpecificWardrobe', async(req, res, next) => {
             id_,
             wardrobe_id,
         } = req.body;
-        console.log('testy');
+        console.log(req.body);
         const articleEntry = await UserEntry.find({
             '_id': id_,
             'wardrobeData._id': wardrobe_id,
