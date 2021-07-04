@@ -9,9 +9,9 @@ require('dotenv').config();
 const saltRounds = 10;
 //fuck this 
 const middlewares = require('./middlewares');
-const logs = require('./api/logs');
-const credentials = require('./api/credentials');
-const updateDB = require('./api/updateDB');
+const logs = require('./server/api/logs');
+//const credentials = require('./api/credentials');
+//const updateDB = require('./api/updateDB');
 
 const app = express();
 
@@ -34,8 +34,8 @@ app.get('/', (res, req) => {
 });
 
 app.use('/api/logs', logs);
-app.use('/api/credentials', credentials);
-app.use('/api/updateDB', updateDB);
+//app.use('/api/credentials', credentials);
+//app.use('/api/updateDB', updateDB);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
