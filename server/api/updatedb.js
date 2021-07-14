@@ -8,28 +8,25 @@ const util = require('./util');
 
 router.post('/addWardrobe', async(req, res, next) => {
     try {
-        /* '_id' : ''*/
         const {
             _id,
-            wardrobe_id,
-            fullName,
             location,
         } = req.body;
-        console.log('Adding Wardrobe to User: ' + fullName);
-        await UserEntry.findOneAndUpdate({
+
+        let doc = await UserEntry.findOneAndUpdate({
                 '_id': _id,
-                'wardrobeData._id': wardrobe_id
             }, {
-                $push: {
-                    // I Need to work on this
-                    'wardrobeData.location': location
-                }
-            },
-            upsert).exec(function(err, docs) {
+                $addToSet: {
+                    wardrobe:{
+                        "location":location
+                    }
+            }},{new: true,upsert:true}
+            ).exec(function(err, docs) {
             if (err) {
                 next(err);
             } else {
-                console.log('Added Wardobe: ' + docs.wardrobeData);
+                console.log('Added Wardobe: ' + docs.wardrobe);
+                res.status(200).json(docs.wardrobe);
             }
         });
     } catch (error) {
@@ -45,19 +42,23 @@ router.post('/deleteWardrobe', async(req, res, next) => {
         const {
             _id,
             wardrobe_id,
-            fullName,
         } = req.body;
-        console.log('Deleting Wardrobe to User: ' + fullName);
-        await UserEntry.findOneAndDelete({
+
+        let doc = await UserEntry.findOneAndUpdate({
             '_id': _id,
-            'wardrobeData._id': wardrobe_id
-        }).exec(function(err, docs) {
-            if (err) {
-                next(err);
-            } else {
-                console.log('Deleted Wardobe: ' + docs.wardrobeData);
-            }
-        });
+        }, {
+            $pull: {
+                wardrobe:{
+                    '_id': wardrobe_id
+                }
+        }}).exec(function(err, docs) {
+        if (err) {
+            next(err);
+        } else {
+            console.log('Added Wardobe: ' + docs.wardrobe);
+            res.status(200).json(docs.wardrobe);
+        }
+    });
     } catch (error) {
         if (error.name === 'Validation Error') {
             res.status(422);
@@ -70,22 +71,21 @@ router.post('/updateWardrobe', async(req, res, next) => {
         const {
             _id,
             wardrobe_id,
-            fullName,
             location,
         } = req.body;
-        console.log('Adding Wardrobe to User: ' + fullName);
         await UserEntry.findOneAndUpdate({
             '_id': _id,
-            'wardrobeData._id': wardrobe_id
+            'wardrobe._id': wardrobe_id
         }, {
             $set: {
-                'wardrobeData.location': location
+                'wardrobe.$.location' : location
             }
         }).exec(function(err, docs) {
             if (err) {
                 next(err);
             } else {
-                console.log('Updated Wardobe: ' + docs.wardrobeData);
+                console.log('Updated Wardobe: ' + docs);
+                res.status(200).json(docs);
             }
         });
     } catch (error) {

@@ -7,7 +7,7 @@ const requiredString = {
     required: true,
 }
 const emailData = {
-    primaryEmail: requiredString,
+    primaryEmail: { type: String, default: null },
     secondaryEmail: { type: String, default: null },
 }
 const securityData = {
@@ -16,19 +16,17 @@ const securityData = {
     securityQuestion1Answer: { type: String, default: null },
     securityQuestion2: { type: String, default: null },
     securityQuestion2Answer: { type: String, default: null },
-    securityQuestion3: { type: String, default: null },
-    securityQuestion3Answer: { type: Number, default: null },
 }
 const articleData = {
     RFID: { type: String, required: true, hide: true, defualt: null },
     picture: { type: Number, default: 0 },
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
-    type: { type: String, required: true, enum: ['Shirt', 'Pants'] },
-    active: { type: Boolean, required: true }
+    type: { type: String, enum: ['Shirt', 'Pants'], defualt: null},
+    active: { type: Boolean, default: null}
 }
 const wardrobeData = {
-    location: { type: String, default: null },
+    location: { type: String, requried:true},
     totalNumberOfArticles: { type: Number, default: 0 },
     totalNumberOfShirts: { type: Number, default: 0 },
     totalNumberOfPants: { type: Number, default: 0 },

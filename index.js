@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 require('dotenv').config();
-const saltRounds = 10;
 //fuck this 
 const middlewares = require('./middlewares');
 const logs = require('./server/api/logs');
@@ -17,7 +16,8 @@ const app = express();
 
 mongoose.connect("mongodb+srv://Brewmaster123:primalsplit@wardrobedbsd2.gbx59.mongodb.net/WardrobeDBSD2?retryWrites=true&w=majority", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false 
 });
 
 app.use(morgan('common'));

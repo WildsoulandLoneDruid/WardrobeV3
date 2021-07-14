@@ -1,8 +1,9 @@
 const { Router } = require('express');
 
 const UserEntry = require("../models/user");
-
+const bcrypt = require('bcrypt');
 const router = Router();
+const saltRounds = 10;
 
 router.get('/', async(req, res, next) => {
     try {
@@ -42,10 +43,25 @@ router.get('/', async(req, res, next) => {
 router.post('/register', async(req, res, next) => {
     try {
         var passwordHash = '';
-        const createdEntry = new UserEntry(req.body);
+        const {
+           fullName,
+           primaryEmail,
+           secondaryEmail,
+           password,
+           securityQuestion1,
+           securityQuestion2,
+           securityQuestion1Answer,
+           securityQuestion2Answer
+        } = req.body;
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash) {
+            // returns hash
+            passwordHash = hash;
+            });
+          });
         const credentialCheck = await UserEntry.findOne({
             // I have to test to find the right index, probably email[0].primary email
-            "email.primaryEmail": createdEntry.email[0].primaryEmail
+            "email.primaryEmail": primaryEmail
         });
         if (credentialCheck != null) {
             var error = 'User already exist';
@@ -54,31 +70,23 @@ router.post('/register', async(req, res, next) => {
             next(error);
         } else {
             console.log('Regeistering new user');
-            bcrypt.genSalt(saltRounds, function(err, salt) {
-                bcrypt.hash(createdEntry.security[0].password, salt, function(err, hash) {
-                    // Store hash in your password DB.
-                    passwordHash = hash;
-                });
-            });
             var userInstance = new UserEntry({
-                fullName: createdEntry.fullName,
+                fullName: fullName,
                 email: [{
-                    primaryEmail: createdEntry.email[0].primaryEmail,
-                    secondaryEmail: createdEntry.email[0].secondaryEmail,
+                    primaryEmail: primaryEmail,
+                    secondaryEmail: secondaryEmail,
                 }],
                 security: [{
                     password: passwordHash,
-                    securityQuestion1: createdEntry.security.securityQuestion1,
-                    securityQuestion1: createdEntry.security.securityQuestion1Answer,
-                    securityQuestion2: createdEntry.security.securityQuestion3,
-                    securityQuestion2: createdEntry.security.securityQuestion2Answer,
-                    securityQuestion3: createdEntry.security.securityQuestion3,
-                    securityQuestion3: createdEntry.security.securityQuestion3Answer,
+                    securityQuestion1: securityQuestion1,
+                    securityQuestion1: securityQuestion1Answer,
+                    securityQuestion2: securityQuestion2,
+                    securityQuestion2: securityQuestion2Answer,
                 }],
             });
             try {
                 await userInstance.save();
-                var result = userInstance.fullName + 'has been succesfully added to the database'
+                var result = userInstance.fullName + ' has been succesfully added to the database'
                 console.log(result);
                 var ret = {
                     result: result,
