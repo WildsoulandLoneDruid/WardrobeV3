@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const UserEntry = require("../models/user");
 const bcrypt = require('bcrypt');
+const nodeMailer = require('nodemailer');
 const router = Router();
 const saltRounds = 10;
 
@@ -102,14 +103,12 @@ router.post('/register', async(req, res, next) => {
 });
 router.post('/changePassword', async(req, res, next) => {
     try {
-        console.log('change password endpoint');
         const {
             email,
             password
         } = req.body;
 
         const credentialCheck = await UserEntry.findOne({
-            // I have to test to find the right index, probably email[0].primary email
             "email.primaryEmail": email
         }).excec(function(err, docs) {
             if (err) {
@@ -124,7 +123,7 @@ router.post('/changePassword', async(req, res, next) => {
                 "email": email
             }, {
                 "$set": {
-                    "password": password,
+                    "security.$.password": password,
                 }
             }.exec(function(err, docs) {
                 if (err) {
@@ -132,6 +131,7 @@ router.post('/changePassword', async(req, res, next) => {
                     res.status(400);
                 } else {
                     console.log('Updated Password: ' + docs);
+                    res.status(200);
                 }
             }));
         }
@@ -139,54 +139,82 @@ router.post('/changePassword', async(req, res, next) => {
         next(error);
     }
 });
-// router.post('/forgotPassword', async(req, res, next) => {
-//     try {
-//         console.log('forgot password endpoint');
-//         const {
-//             email,
-//             code
-//         } = req.body;
-//         const credentialCheck = await UserEntry.findOne({
-//             "email.primaryEmail": email
-//         }).excec(function(err, docs) {
-//             if (err) {
-//                 next(err);
-//                 res.status(422);
-//             }
-//             if (docs == null) {
-//                 var err = 'User not found';
-//                 res.status(400);
-//                 next(err);
-//             }
-//         });
-//         var transporter = nodeMailer.createTransport({
-//             service: 'gmail',
-//             secure: true,
-//             auth: {
-//                 user: process.env.GMAIL_USERNAME == null ? 'somerandome@gmail.com' : process.env.GMAIL_USERNAME,
-//                 pass: process.env.GMAIL_PASSWORD == null ? '123456' : process.env.GMAIL_PASSWORD
-//             }
-//         });
-//         var mailOPtions = {
-//             from: process.env.GMAIL_USERNAME == null ? 'somerandome@gmail.com' : process.env.GMAIL_USERNAME,
-//             to: email,
-//             subject: 'Forgot Password Confirmation',
-//             text: 'Hello ' + credentialCheck[0].fullName + ' please input the following code ' + code + ' on the forgot password page. \nIf you did not request this change you can ignore this email.'
-//         }
-//         try {
-//             transporter.sendMail(mailOPtions, function(err, info) {
-//                 if (err) {
-//                     next(err);
-//                     res.status(500);
-//                 }
-//             });
-//         } catch (err) {
-//             next(err);
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-// });
+router.post('/login', async(req, res, next) => {
+    try {
+        var passwordHash = '';
+        const {
+            email,
+            password
+        } = req.body;
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash) {
+            // returns hash
+            passwordHash = hash;
+            });
+          });
+        const credentialCheck = await UserEntry.findOne({
+            "email.primaryEmail": email,
+            "security.password": passwordHash
+        }).excec(function(err, docs) {
+            if (err) {
+                next(err);
+            }
+            else{
+                console.log('User: ' + credentialCheck);
+                res.status(200).json(credentialCheck);
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+router.post('/forgotPassword', async(req, res, next) => {
+    try {
+        console.log('forgot password endpoint');
+        const {
+            email,
+            code
+        } = req.body;
+        const credentialCheck = await UserEntry.findOne({
+            "email.primaryEmail": email
+        }).excec(function(err, docs) {
+            if (err) {
+                next(err);
+                res.status(422);
+            }
+            if (docs == null) {
+                var err = 'User not found';
+                res.status(400);
+                next(err);
+            }
+        });
+        var transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            secure: true,
+            auth: {
+                user: process.env.GMAIL_USERNAME == null ? 'somerandome@gmail.com' : process.env.GMAIL_USERNAME,
+                pass: process.env.GMAIL_PASSWORD == null ? '123456' : process.env.GMAIL_PASSWORD
+            }
+        });
+        var mailOPtions = {
+            from: process.env.GMAIL_USERNAME == null ? 'somerandome@gmail.com' : process.env.GMAIL_USERNAME,
+            to: email,
+            subject: 'Forgot Password Confirmation',
+            text: 'Hello ' + credentialCheck[0].fullName + ' please input the following code ' + code + ' on the forgot password page. \nIf you did not request this change you can ignore this email.'
+        }
+        try {
+            transporter.sendMail(mailOPtions, function(err, info) {
+                if (err) {
+                    next(err);
+                    res.status(500);
+                }
+            });
+        } catch (err) {
+            next(err);
+        }
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router;
