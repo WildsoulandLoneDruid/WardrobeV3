@@ -1,12 +1,13 @@
 import React from 'react'
 import '../../App.css'
-import Footer from '../Fotter'
+import Footer from '../Footer'
 import MainScreenSection from '../MainScreen'
+import NavBar from '../NavBar'
 
 function Home() {
     return (
       <>
-        <navBar/>
+        <NavBar />
         <MainScreenSection />
         <Footer />
       </>
