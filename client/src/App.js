@@ -2,11 +2,10 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './components/pages/Home'
-import Services from './components/pages/Services'
-import About from './components/pages/About'
-import Signed_Up from './components/pages/Sign_up'
-import NavBar from './components/NavBar'
+import Home from './components/pages/Home.js'
+import Services from './components/pages/Services.js'
+import About from './components/pages/About.js'
+import Signed_Up from './components/pages/Sign_up.js'
 /* import router  npm install react-bootstrap bootstrap@4.6.0
   npm install node-sass --save-dev
   stylized-componetns
