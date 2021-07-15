@@ -155,7 +155,7 @@ router.post('/login', async(req, res, next) => {
         const credentialCheck = await UserEntry.findOne({
             "email.primaryEmail": email,
             "security.password": passwordHash
-        }).excec(function(err, docs) {
+        }).select('-security.password').excec(function(err, docs) {
             if (err) {
                 next(err);
             }
