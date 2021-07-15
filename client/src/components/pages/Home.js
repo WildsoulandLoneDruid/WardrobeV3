@@ -6,6 +6,7 @@ import MainScreenSection from '../MainScreen'
 function Home() {
     return (
       <>
+        <navBar/>
         <MainScreenSection />
         <Footer />
       </>
