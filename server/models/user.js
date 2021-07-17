@@ -26,7 +26,7 @@ const articleData = {
     active: { type: Boolean, default: null}
 }
 const wardrobeData = {
-    location: { type: String, requried:true},
+    location: { type: String, requried:true },
     totalNumberOfArticles: { type: Number, default: 0 },
     totalNumberOfShirts: { type: Number, default: 0 },
     totalNumberOfPants: { type: Number, default: 0 },
