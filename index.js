@@ -10,7 +10,7 @@ require('dotenv').config();
 const middlewares = require('./middlewares');
 const logs = require('./server/api/logs');
 const credentials = require('./server/api/credentials');
-const updateDB = require('./server/api/updatedb');
+const updateDB = require('./server/api/updateDB');
 
 const app = express();
 
