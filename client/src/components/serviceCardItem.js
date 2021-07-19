@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function serviceCardItem(props) {
+function CardItem(props) {
   return (
     <>
       <li className='cards__item'>
@@ -9,25 +9,15 @@ function serviceCardItem(props) {
           <figure className='cards__item__pic-wrap' data-category={props.label}>
             <img
               className='cards__item__img'
-              alt='Shirt'
+              alt='Travel Image'
               src={props.src}
             />
           </figure>
           <div className='cards__item__info'>
-             <div class="row">
-               <div class="col-sm">
-                  RFID: {props.RFID}
-               </div>
-               <div class="col-sm">
-                  type: {props.type}
-               </div>
-               <div class="col-sm">
-                  Times Used: {props.timesUsed}
-               </div>
-               <div class="col-sm">
-                  Active: {props.active}
-               </div>
-              </div> 
+            <h5 className='cards__item__text'>{props.text}</h5>
+            <h5 className='cards__item__text'>RFID: {props.RFID}</h5>
+            <h5 className='cards__item__text'>Times Used: {props.timesUsed}</h5>
+            <h5 className='cards__item__text'>Status: {props.active} </h5>
           </div>
         </Link>
       </li>
@@ -35,4 +25,4 @@ function serviceCardItem(props) {
   );
 }
 
-export default serviceCardItem;
+export default CardItem;

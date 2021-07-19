@@ -1,6 +1,6 @@
 import React from 'react';
-import './serviceCards.css';
-import ServiceCardItem from './serviceCardItem';
+import './Cards.css';
+import CardItem from './serviceCardItem';
 
 function serviceCards() {
   return (
@@ -8,49 +8,55 @@ function serviceCards() {
       <div className='cards__container'>
         <div className='cards__wrapper'>
           <ul className='cards__items'>
-            <ServiceCardItem
+            <CardItem
+              label='Shirt'
               src='images/services/T-Shirt_1.png'
-              type = 'Shirt'
               RFID = 'ABC123'
-              active = 'inactive'
+              active = 'I'
               timesUsed = '15'
+              text='Item Description'
             />
-            <ServiceCardItem
+            <CardItem
+              text='Item Description'
+              label='Pants'
               src='images/services/Pants_1.jpg'
-              type = 'Pants'
               RFID = 'LOL908'
-              active = 'inactive'
+              active = 'I'
               timesUsed = '12'
             />
-            <ServiceCardItem
-            src='images/services/T-Shirt_2.png'
-            type = 'Shirt'
-            RFID = 'HAS786'
-            active = 'active'
-            timesUsed = '7'
+            <CardItem
+              src='images/services/T-Shirt_2.png'
+              label='Pants'
+              RFID = 'HAS786'
+              active = 'A'
+              timesUsed = '7'
+              text='Item Description'
             />
           </ul>
           <ul className='cards__items'>
-          <serviceCardItem
-              src='images/services/Pants_2.png'
-              type = 'Pants'
-              RFID = 'TTTY89'
-              active = 'inactive'
-              timesUsed = '5'
+            <CardItem
+            src='images/services/Pants_2.png'
+            label='Pants'
+            RFID = 'HAS786'
+            active = 'A'
+            timesUsed = '7'
+            text='Item Description'
             />
-            <serviceCardItem
-              src='images/services/T-Shirt_3.png'
-              type = 'Shirt'
-              RFID = 'LMN789'
-              active = 'inactive'
-              timesUsed = '2'
+            <CardItem
+            src='images/services/T-Shirt_3.png'
+            label = 'Shirt'
+            RFID = 'LMN789'
+            active = 'A'
+            timesUsed = '2'
+            text='Item Description'
             />
-            <serviceCardItem
-            src='images/services/Pants_3.png'
-            type = 'Pants'
-            RFID = 'DEF321'
-            active = 'inactive'
-            timesUsed = '0'
+            <CardItem
+              src='images/services/Pants_3.png'
+              label = 'Pants'
+              RFID = 'DEF321'
+              active = 'I'
+              timesUsed = '0'
+              text='Item Description'
             />
           </ul>
         </div>

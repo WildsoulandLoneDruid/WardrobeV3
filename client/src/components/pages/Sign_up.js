@@ -8,8 +8,7 @@ function SignIn() {
     return (
       <>
         <NavBar />
-        <h1>Who we are</h1>
-        <Form />
+        <div><Form /></div>
         <Footer />
       </>
     )
