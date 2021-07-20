@@ -8,7 +8,7 @@ function SignIn() {
     return (
       <>
         <NavBar />
-        <div><Form /></div>
+        <Form />
         <Footer />
       </>
     )

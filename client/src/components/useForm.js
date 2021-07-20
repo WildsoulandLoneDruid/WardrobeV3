@@ -1,4 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: `http://localhost:1337/api/`
+})
 
 const useForm = (callback, validate) => {
   const [values, setValues] = useState({
@@ -17,12 +23,32 @@ const useForm = (callback, validate) => {
       [name]: value
     });
   };
-
-  const handleSubmit = e => {
+  const history = useHistory();
+  const handleSubmit = async e => {
     e.preventDefault();
-
     setErrors(validate(values));
     setIsSubmitting(true);
+    try{
+    const response = await api({
+        url:'/credentials/login',
+        method: 'POST',
+        data: {
+        email: values.email.toLowerCase(),
+        password: values.password
+    }
+  })
+  if(response.status === 200){
+    localStorage.setItem('sessionId', response.data.sessionId);
+    localStorage.setItem('sessionExpires', Date.now() + 360000);
+
+    console.log(localStorage.getItem('sessionId'));
+    history.push('/Userpage');
+  }else{
+  console.log('error',response.data);
+  }
+}catch(e){
+console.log(e)
+}
   };
 
   useEffect(

@@ -1,6 +1,7 @@
 import React from 'react';
 import validate from './validateInfo';
 import useForm from './useForm';
+import { Link } from 'react-router-dom';
 import './Form.css';
 
 const FormSignup = ({ submitForm }) => {
@@ -17,7 +18,7 @@ const FormSignup = ({ submitForm }) => {
           information below.
         </h1>
         <div className='form-inputs'>
-          <label className='form-label'>Username</label>
+          <label className='form-label'>Full Name</label>
           <input
             className='form-input'
             type='text'
@@ -68,7 +69,8 @@ const FormSignup = ({ submitForm }) => {
           Sign up
         </button>
         <span className='form-input-login'>
-          Already have an account? Login <a href='#'>here</a>
+          Already have an account? Login <Link
+          to='/login'> here </Link>
         </span>
       </form>
     </div>
