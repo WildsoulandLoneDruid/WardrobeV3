@@ -102,13 +102,16 @@ router.post('/addArticle', async(req, res, next) => {
             color,
             type
         } = req.body;
-        let articleCheck = await UserEntry.findOne({
+        let article = await UserEntry.findOne({
             "wardrobe._id":wardrobe_id
         }).select({wardrobe:{$elemMatch:{_id:wardrobe_id}}})
-        articleCheck = JSON.stringify(articleCheck.wardrobe);
-        let temp = JSON.parse(articleCheck);
-
-        var update = util.updateNumberOfArticles(temp[0]['totalNumberOfShirts'],temp[0]['totalNumberOfPants'], type, 1);
+        
+        if (!article) {
+            throw new Error('Article not found');
+        }
+        // yup and all to be able to extract the data, I played with it for a while and this is what worked
+        article = article.toObject().wardrobe;
+        var update = util.updateNumberOfArticles(article[0].totalNumberOfShirts,article[0].totalNumberOfPants, type, 1);
         await UserEntry.findOneAndUpdate({
             '_id': _id,
             'wardrobe._id': wardrobe_id
@@ -125,15 +128,21 @@ router.post('/addArticle', async(req, res, next) => {
                 console.log("Updated Amounts");
             }
         });
+        // up to here is working here
         await UserEntry.findOneAndUpdate({
             '_id': _id,
             'wardrobe._id': wardrobe_id
         }, {
             $addToSet:
             {
-                    'wardrobe.$.articleData.$.RFID' : RFID,
+               'wardrobe.$.articleData':
+               {
+                    RFID:RFID,
+                    type: type,
+                    color: color,
+               }
             }
-        }).exec(function(err, docs) {
+        },{new: true,upsert:true}).exec(function(err, docs) {
             if (err) {
                 next(err);
             } else {

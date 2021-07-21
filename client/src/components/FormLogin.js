@@ -1,4 +1,6 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import validate from './validateInfo';
 import useForm from './useForm';
 import './Form.css';
@@ -11,13 +13,21 @@ const initialState = {
   wardrobe: [],
 };
 
+const sessionId = localStorage.getItem('sessionId');
+const sessionExpires = Number(localStorage.getItem('sessionExpires'));
+
 
 const FormLogin = ({ submitForm }) => {
+  const history = useHistory();
   const { handleChange, handleSubmit,values, errors } = useForm(
     submitForm,
     validate
   );
 
+  if (sessionId && Date.now() < sessionExpires) {
+    history.push('/UserPage');
+    return <div>You already have logged in</div>;
+  }
 
   return (
     <div className='form-content-right'>

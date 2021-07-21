@@ -42,28 +42,33 @@ let newLocation = null;
 const sessionId = localStorage.getItem('sessionId');
 const sessionExpires = Number(localStorage.getItem('sessionExpires'));
 
+function fetchData(){
+  return api({
+    url:'/credentials/userInfo',
+    method: 'POST',
+    data: {
+      _id: sessionId
+    }
+  })
+}
+
 function UserPage() {
   const history = useHistory();
   const [items, setItems] = React.useState(allItems);
   const [newLocation, setNewLocation] = useState('');
-  useEffect(() => {
-    // Update the document title using the browser API
-    async function fetchData(){
-      let userData = await api({
-              url:'/credentials/userInfo',
-              method: 'POST',
-              data: {
-              _id: sessionId
-          }
-        })
-        //console.log(userData.data.wardrobe)
-        // response = await userData.json()
-        //setData(userData.data)
-        localStorage.setItem('data', JSON.stringify(userData.data));
-    }
-    fetchData()
-    //console.log("Data: " + userData);
-  }, []);
+  // NICK START
+  function refreshAllData() {
+    // Fetch all the data that you need for the page
+    fetchData().then(data =>{
+      // If you are doing multiple async calls, you can use Promise.all 
+      // like: Promise.all([fetchUser(), fetchWarddrobe()]).then(([userData, wardrobes]) => { setUserData(userData); setWardrobeData(wardrobes); });
+      // or if just one then: setData(data);
+    })
+  }
+
+  // Refresh all data on the first page load
+  useEffect(refreshAllData, []);
+  // NICK END
 
   if(!sessionId || Date.now() >= sessionExpires) {
     history.push('/login');
@@ -102,6 +107,9 @@ function UserPage() {
                     <Typography align ="left">Number Of Articles : {individualWardrobe.totalNumberOfArticles}</Typography>
                     <Grid container direction="row" alignContent="flex-start" justify="space-between">
                       <Button variant="contained" color="secondary" onClick={async()=>{
+                        // NICK START
+
+                        // You can do any api call and if it updates something in the database then
                         let userData = await api({
                             url:'/updateDB/deleteWardrobe',
                             method: 'POST',
@@ -109,8 +117,9 @@ function UserPage() {
                             wardrobe_id: individualWardrobe._id
                             }
                           })
-                          // this here is not working everything else is good
-                          history.push('/userpage');
+                          // you refresh all the data you need to
+                          refreshAllData();
+                          // NICK END
                       }}>
                         Delete 
                       </Button>
@@ -132,7 +141,8 @@ function UserPage() {
                             }
                           })
                           // this here is not working everything else is good
-                          history.push('/userpage');
+                          // history.push('/userpage');
+
                       }}>
                         Update
                       </Button>

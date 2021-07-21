@@ -18,12 +18,12 @@ const securityData = {
     securityQuestion2Answer: { type: String, default: null },
 }
 const articleData = {
-    RFID: { type: String, required: true, hide: true, defualt: null },
+    RFID: { type: String, required: true, default: null },
     picture: { type: Number, default: 0 },
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
-    type: { type: String, enum: ['Shirt', 'Pants'], defualt: null},
-    status: { type: String, default: null}
+    type: { type: String, enum: ['Shirt', 'Pants'], default: null},
+    status: { type: String,enum: ['A', 'NA'] ,default: 'A'}
 }
 const wardrobeData = {
     location: { type: String, requried:true },
