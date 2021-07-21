@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './NavBar.css'
 
-function Navbar() {
+function Navbar(probs) {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
 
@@ -59,14 +59,18 @@ function Navbar() {
                 About us
               </Link>
             </li>
-
             <li>
-              <Link
+              {probs.flag ? <Link
+                to='/UserPage'
+                className='nav-links'
+                onClick={closeMobileMenu}
+              > {probs.name}
+              </Link>: <Link
                 to='/sign-up'
                 className='nav-links'
                 onClick={closeMobileMenu}
               > Sign Up
-              </Link>
+              </Link>}
             </li>
           </ul>
         </div>

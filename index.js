@@ -11,8 +11,10 @@ const middlewares = require('./middlewares');
 const logs = require('./server/api/logs');
 const credentials = require('./server/api/credentials');
 const updateDB = require('./server/api/updateDB');
+var cookieParser = require('cookie-parser');
 
 const app = express();
+
 
 mongoose.connect("mongodb+srv://Brewmaster123:primalsplit@wardrobedbsd2.gbx59.mongodb.net/WardrobeDBSD2?retryWrites=true&w=majority", {
     useNewUrlParser: true,
@@ -22,13 +24,19 @@ mongoose.connect("mongodb+srv://Brewmaster123:primalsplit@wardrobedbsd2.gbx59.mo
 
 app.use(morgan('common'));
 app.use(helmet());
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-}));
-app.use(express.json());
-
-app.get('/', (res, req) => {
-    res.json({
+const corsOptions ={
+    origin:'http://localhost:1337', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions
+    //origin: process.env.CORS_ORIGIN,
+    ));
+    app.use(express.json());
+    app.use(cookieParser('test'))
+    
+    app.get('/', (res, req) => {
+        res.json({
         message: 'Hello world',
     });
 });

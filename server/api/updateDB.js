@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { listeners } = require('../models/user');
 
 const UserEntry = require('../models/user');
 
@@ -12,7 +13,6 @@ router.post('/addWardrobe', async(req, res, next) => {
             _id,
             location,
         } = req.body;
-
         let doc = await UserEntry.findOneAndUpdate({
                 '_id': _id,
             }, {
@@ -40,12 +40,11 @@ router.post('/deleteWardrobe', async(req, res, next) => {
     try {
         /* '_id' : ''*/
         const {
-            _id,
             wardrobe_id,
         } = req.body;
 
         let doc = await UserEntry.findOneAndUpdate({
-            '_id': _id,
+            'wardrobe._id': wardrobe_id,
         }, {
             $pull: {
                 wardrobe:{
@@ -69,12 +68,10 @@ router.post('/deleteWardrobe', async(req, res, next) => {
 router.post('/updateWardrobe', async(req, res, next) => {
     try {
         const {
-            _id,
             wardrobe_id,
             location,
         } = req.body;
         await UserEntry.findOneAndUpdate({
-            '_id': _id,
             'wardrobe._id': wardrobe_id
         }, {
             $set: {
@@ -105,35 +102,42 @@ router.post('/addArticle', async(req, res, next) => {
             color,
             type
         } = req.body;
-        var update = util.updateNumberOfArticles(articleCheck, type, 1);
-        const articleEntry = await UserEntry.findOneAndUpdate({
+        let articleCheck = await UserEntry.findOne({
+            "wardrobe._id":wardrobe_id
+        }).select({wardrobe:{$elemMatch:{_id:wardrobe_id}}})
+        articleCheck = JSON.stringify(articleCheck.wardrobe);
+        let temp = JSON.parse(articleCheck);
+
+        var update = util.updateNumberOfArticles(temp[0]['totalNumberOfShirts'],temp[0]['totalNumberOfPants'], type, 1);
+        await UserEntry.findOneAndUpdate({
             '_id': _id,
             'wardrobe._id': wardrobe_id
-        }, {
+        },{
             $set: {
-                wardrobe:{
-                    'wardrobe.$.totalNumberOfShirts' : update.updateNumberOfShirts,
-                    'wardrobe.$.totalNumberOfPants' :  update.totalNumberofPants,
-                    'wardrobe.$.totalNumberOfArticles' : update.totalNumberofPants + update.totalNumberofShirts
-                }
-            },
-            $addToSet:
-            {
-                wardrobe:
-                {
-                    articleData: {
-                        'RFID': RFID,
-                        'color': color,
-                        'type': type,
-                        'active': 'inactive',
-                    }
-                }
+                    'wardrobe.$.totalNumberOfShirts' : update[0],
+                    'wardrobe.$.totalNumberOfPants' :  update[1],
+                    'wardrobe.$.totalNumberOfArticles' : update[0] + update [1],
             }
-        }, {new: true,upsert:true}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {
+        }).exec(function(err, docs) {
             if (err) {
                 next(err);
             } else {
-                console.log('Added Article Wardobe: ' + articleEntry);
+                console.log("Updated Amounts");
+            }
+        });
+        await UserEntry.findOneAndUpdate({
+            '_id': _id,
+            'wardrobe._id': wardrobe_id
+        }, {
+            $addToSet:
+            {
+                    'wardrobe.$.articleData.$.RFID' : RFID,
+            }
+        }).exec(function(err, docs) {
+            if (err) {
+                next(err);
+            } else {
+                console.log('Added Article Wardobe: ' + docs);
                 res.status(200).json(docs);
             }
         })

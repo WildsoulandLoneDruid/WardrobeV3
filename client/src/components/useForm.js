@@ -39,7 +39,7 @@ const useForm = (callback, validate) => {
   })
   if(response.status === 200){
     localStorage.setItem('sessionId', response.data.sessionId);
-    localStorage.setItem('sessionExpires', Date.now() + 360000);
+    localStorage.setItem('sessionExpires', Date.now() + 360000000);
 
     console.log(localStorage.getItem('sessionId'));
     history.push('/Userpage');

@@ -23,7 +23,7 @@ const articleData = {
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
     type: { type: String, enum: ['Shirt', 'Pants'], defualt: null},
-    active: { type: Boolean, default: null}
+    status: { type: String, default: null}
 }
 const wardrobeData = {
     location: { type: String, requried:true },

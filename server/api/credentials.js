@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const bodyParser = require('body-parser');
 
 const UserEntry = require("../models/user");
 const bcrypt = require('bcrypt');
@@ -6,33 +7,25 @@ const nodeMailer = require('nodemailer');
 const router = Router();
 const saltRounds = 10;
 
-router.get('/', async(req, res, next) => {
+router.post('/userInfo', async(req, res, next) => {
     try {
         console.log(' Getting user Information');
-        const loginEntry = new UserEntry(req.body);
+        const {
+            _id
+         } = req.body;
         const credentialCheck = await UserEntry.findOne({
             // I have to test to find the right index, probably email[0].primary email
-            "email.primaryEmail": loginEntry.email[0].primaryEmail,
-            "security.password": loginEntry.security[0].password
+            "_id": _id,
         });
-        if (credentialCheck != null) {
+        if (credentialCheck == null) {
             res.status(400);
             var error = 'User does not exist';
             next(error);
         }
-        // Unhash passoword
-        bcrypt.compare(loginEntry.security[0].password, createdEntry.security[0].password, function(err, result) {
-            // returns result
-            if (result) {
-                console.log("It matches!");
-                res.status(200).json(credentialCheck);
-            } else {
-                var error = 'Invalid password!';
-                console.log(error);
-                res.status(400);
-                next(error);
-            }
-        });
+        else
+        {
+            res.json(credentialCheck);
+        }
     } catch (error) {
         if (error.name === 'Validation Error') {
             res.status(422);
@@ -54,15 +47,16 @@ router.post('/register', async(req, res, next) => {
            securityQuestion1Answer,
            securityQuestion2Answer
         } = req.body;
-        bcrypt.genSalt(saltRounds, function(err, salt) {
-            bcrypt.hash(password, salt, function(err, hash) {
-            // returns hash
-            passwordHash = hash;
-            });
-          });
+        // bcrypt.genSalt(saltRounds, function(err, salt) {
+        //     bcrypt.hash(password, salt, function(err, hash) {
+        //     // returns hash
+        //     passwordHash = hash;
+        //     });
+        //   });
+          //console.log(passwordHash);
         const credentialCheck = await UserEntry.findOne({
             // I have to test to find the right index, probably email[0].primary email
-            "email.primaryEmail": primaryEmail
+            "email.primaryEmail": primaryEmail.toLowercase()
         });
         if (credentialCheck != null) {
             var error = 'User already exist';
@@ -74,11 +68,11 @@ router.post('/register', async(req, res, next) => {
             var userInstance = new UserEntry({
                 fullName: fullName,
                 email: [{
-                    primaryEmail: primaryEmail,
+                    primaryEmail: primaryEmail.toLowercase(),
                     secondaryEmail: secondaryEmail,
                 }],
                 security: [{
-                    password: passwordHash,
+                    password: password,
                     securityQuestion1: securityQuestion1,
                     securityQuestion1: securityQuestion1Answer,
                     securityQuestion2: securityQuestion2,
@@ -109,7 +103,7 @@ router.post('/changePassword', async(req, res, next) => {
         } = req.body;
 
         const credentialCheck = await UserEntry.findOne({
-            "email.primaryEmail": email
+            "email.primaryEmail": email.toLowercase()
         }).excec(function(err, docs) {
             if (err) {
                 next(err);
@@ -141,29 +135,33 @@ router.post('/changePassword', async(req, res, next) => {
 });
 router.post('/login', async(req, res, next) => {
     try {
+        console.log("login");
         var passwordHash = '';
         const {
             email,
             password
         } = req.body;
-        bcrypt.genSalt(saltRounds, function(err, salt) {
-            bcrypt.hash(password, salt, function(err, hash) {
-            // returns hash
-            passwordHash = hash;
-            });
-          });
+        // bcrypt.genSalt(saltRounds, function(err, salt) {
+        //     bcrypt.hash(password, salt, function(err, hash) {
+        //     // returns hash
+        //     passwordHash = hash;
+        //     });
+        //   });
         const credentialCheck = await UserEntry.findOne({
+            // I have to test to find the right index, probably email[0].primary email
             "email.primaryEmail": email,
-            "security.password": passwordHash
-        }).select('-security.password').excec(function(err, docs) {
-            if (err) {
-                next(err);
-            }
-            else{
-                console.log('User: ' + credentialCheck);
-                res.status(200).json(credentialCheck);
-            }
+            "security.password": password
         });
+        //console.log(credentialCheck);
+        if (credentialCheck == null) {
+            res.status(400);
+            var error = 'User does not exist';
+            next(error);
+        }
+        else
+        {
+            res.json({sessionId:credentialCheck._id});
+        }
     } catch (error) {
         next(error);
     }
@@ -176,7 +174,7 @@ router.post('/forgotPassword', async(req, res, next) => {
             code
         } = req.body;
         const credentialCheck = await UserEntry.findOne({
-            "email.primaryEmail": email
+            "email.primaryEmail": email.toLowercase()
         }).excec(function(err, docs) {
             if (err) {
                 next(err);
