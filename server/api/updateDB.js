@@ -165,6 +165,7 @@ router.post('/removeArticle', async(req, res, next) => {
             _id,
             wardrobe_id,
             RFID,
+            type
         } = req.body;
         let article = await UserEntry.findOne({
             "wardrobe._id":wardrobe_id
@@ -174,6 +175,25 @@ router.post('/removeArticle', async(req, res, next) => {
             throw new Error('Article not found');
         }
         // yup and all to be able to extract the data, I played with it for a while and this is what worked
+        await UserEntry.findOneAndUpdate({
+            '_id': _id,
+            'wardrobe._id': wardrobe_id
+        }, {
+            $pull:
+            {
+               'wardrobe.$.articleData':
+               {
+                    RFID:RFID,
+               }
+            }
+        }).select({wardrobe:{$elemMatch:{_id:wardrobe_id}}}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {
+            if (err) {
+                next(err);
+            } else {
+                console.log('Removed Article: ' + docs);
+                res.status(200).json(docs);
+            }
+        })
         article = article.toObject().wardrobe;
         var update = util.updateNumberOfArticles(article[0].totalNumberOfShirts,article[0].totalNumberOfPants, type, 0);
         await UserEntry.findOneAndUpdate({
@@ -193,25 +213,6 @@ router.post('/removeArticle', async(req, res, next) => {
             }
         });
         // up to here is working here
-        await UserEntry.findOneAndUpdate({
-            '_id': _id,
-            'wardrobe._id': wardrobe_id
-        }, {
-            $pull:
-            {
-               'wardrobe.$.articleData':
-               {
-                    RFID:RFID,
-               }
-            }
-        },{new: true,upsert:true}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {
-            if (err) {
-                next(err);
-            } else {
-                console.log('Removed Article: ' + docs);
-                res.status(200).json(docs);
-            }
-        })
     } catch (error) {
         if (error.name === 'Validation Error') {
             res.status(422);
@@ -312,3 +313,5 @@ router.post('/updateTimesUsed', async(req, res, next) => {
         next(error);
     }
 });
+
+module.exports = router;

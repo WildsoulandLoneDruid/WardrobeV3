@@ -1,15 +1,24 @@
 import React from 'react';
 import validate from './validateInfo';
 import useForm from './useForm';
-import { Link } from 'react-router-dom';
+import { Link, useHistory} from 'react-router-dom';
 import './Form.css';
 
+const sessionId = localStorage.getItem('sessionId');
+const sessionExpires = Number(localStorage.getItem('sessionExpires'));
+
 const FormSignup = ({ submitForm }) => {
+  const history = useHistory();
   const { handleChange, handleSubmit, values, errors } = useForm(
     submitForm,
     validate
   );
-
+  
+  if (sessionId && Date.now() < sessionExpires) {
+    history.push('/UserPage');
+    return <div>You already have logged in</div>;
+  }
+  
   return (
     <div className='form-content-right'>
       <form onSubmit={handleSubmit} className='form' noValidate>
@@ -65,7 +74,7 @@ const FormSignup = ({ submitForm }) => {
           />
           {errors.password2 && <p>{errors.password2}</p>}
         </div>
-        <button className='form-input-btn' type='submit'>
+        <button className='form-input-btn' type='submit' onClick={handleSubmit}>
           Sign up
         </button>
         <span className='form-input-login'>

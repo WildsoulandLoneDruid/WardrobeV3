@@ -5,12 +5,12 @@ function updateNumberOfArticles(tShirts,tPants, type, arithmatic) {
     var updatedTotalNumberOfPants = tPants;
     if (type === 'Shirt' && arithmatic === 1) {
         var updatedTotalNumberOfShirts = tShirts + 1;
-    } else if (type === 'Shirt' && arithmatic === 1) {
-        var updatedTotalNumberOfPants = tPants - 1;
+    } else if (type === 'Shirt' && arithmatic === 0) {
+        var updatedTotalNumberOfShirts = tShirts - 1;
     } else if (type === 'Pants' && arithmatic === 1) {
         var updatedTotalNumberOfPants = tPants + 1;
     } else {
-        var updatedTotalNumberOfPants = tShirts - 1;
+        var updatedTotalNumberOfPants = tPants - 1;
     }
     console.log(updatedTotalNumberOfShirts, updatedTotalNumberOfPants);
     var total =[updatedTotalNumberOfShirts,updatedTotalNumberOfPants];

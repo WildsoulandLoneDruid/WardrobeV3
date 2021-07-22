@@ -3,7 +3,7 @@ import '../../App.css'
 import Footer from '../Footer'
 import UserPageButton from '../UserpageButtons/UserPageButton'
 import NavBar from '../NavBar'
-import CardItem from '../CardItem'
+import CardItem from '../serviceCardItem'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
@@ -13,27 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { spacing } from '@material-ui/system';
-let allItems = [
-  {x:'shirt', y:1},
-  {x:'pants', y:2},
-  {x:'socks', y:3},
-];
-let allItems2 = [
-  {x:'6', y:1},
-  {x:'7', y:2},
-  {x:'8', y:3},
-  {x:'9', y:3},
-  {x:'10', y:3},
-  {x:'11', y:3},
-];
-let allItems3 = [
-  {x:'1', y:1},
-  {x:'2', y:2},
-  {x:'3', y:3},
-  {x:'4', y:3},
-  {x:'5', y:3},
-  {x:'6', y:3},
-];
+import { set } from 'mongoose'
 const api = axios.create({
   baseURL: `http://localhost:1337/api/`
 });
@@ -50,31 +30,33 @@ function fetchData(){
       _id: sessionId
     }
   })
-}
-
+} 
+let data = {};
 function UserPage() {
   const history = useHistory();
-  const [items, setItems] = React.useState(allItems);
+  const [items, setItems] = React.useState([]);
+  const [data, setData] = React.useState({email:[],fullName:'',_id:''});
+  const [wardrobes, setWardrobes] = React.useState([]);
   const [newLocation, setNewLocation] = useState('');
-  // NICK START
+  const [wardrobeId, setWardrobeId] = useState('');
   function refreshAllData() {
     // Fetch all the data that you need for the page
-    fetchData().then(data =>{
-      // If you are doing multiple async calls, you can use Promise.all 
-      // like: Promise.all([fetchUser(), fetchWarddrobe()]).then(([userData, wardrobes]) => { setUserData(userData); setWardrobeData(wardrobes); });
-      // or if just one then: setData(data);
+    fetchData().then(({data:{email, fullName, wardrobe,_id}}) =>{
+      setData({ email, fullName, _id });
+      setWardrobes(wardrobe);
     })
   }
 
   // Refresh all data on the first page load
   useEffect(refreshAllData, []);
-  // NICK END
 
   if(!sessionId || Date.now() >= sessionExpires) {
     history.push('/login');
     return <div>Please Login</div>
   }
-  let data = JSON.parse(localStorage.getItem('data'));
+  // let dataLocal = JSON.parse(localStorage.getItem('data'));
+  // setData(dataLocal);
+  // console.log(data.wardrobe);
   // is protected only logged user can view
     return (
       <>
@@ -97,7 +79,7 @@ function UserPage() {
         <Grid container spacing={1}>
           <Grid item xs={3} container direction="column" alignItems="center">
           <ul >
-              {data.wardrobe.map((individualWardrobe,index) => {
+              {wardrobes.map((individualWardrobe,index) => {
                 return  (
                   <>
                     <Box borderTop={0} borderRadius={16} m={3} > 
@@ -107,9 +89,6 @@ function UserPage() {
                     <Typography align ="left">Number Of Articles : {individualWardrobe.totalNumberOfArticles}</Typography>
                     <Grid container direction="row" alignContent="flex-start" justify="space-between">
                       <Button variant="contained" color="secondary" onClick={async()=>{
-                        // NICK START
-
-                        // You can do any api call and if it updates something in the database then
                         let userData = await api({
                             url:'/updateDB/deleteWardrobe',
                             method: 'POST',
@@ -117,14 +96,26 @@ function UserPage() {
                             wardrobe_id: individualWardrobe._id
                             }
                           })
-                          // you refresh all the data you need to
                           refreshAllData();
-                          // NICK END
                       }}>
                         Delete 
                       </Button>
+                      <Button variant="contained" color="default" onClick={async()=>{
+                        let userData = await api({
+                            url:'/updateDB/deleteWardrobe',
+                            method: 'POST',
+                            data: {
+                            wardrobe_id: individualWardrobe._id
+                            }
+                          })
+                          refreshAllData();
+                      }}>
+                        Add Article 
+                      </Button>
                       <Button variant="contained" color="primary" onClick={async()=>{
-                        setItems(allItems2);
+                        setItems(individualWardrobe.articleData);
+                        setWardrobeId(individualWardrobe._id);
+                        //try getting it to set wardrobe content
                       }}>
                         Send
                       </Button>
@@ -140,9 +131,7 @@ function UserPage() {
                             location: newLocation
                             }
                           })
-                          // this here is not working everything else is good
-                          // history.push('/userpage');
-
+                          refreshAllData();
                       }}>
                         Update
                       </Button>
@@ -163,6 +152,7 @@ function UserPage() {
                 })
                 // this here is not working everything else is good
                 //this.forceUpdate();
+                refreshAllData();
               }}>
                 Add Wardrobe
               </Button>
@@ -170,11 +160,49 @@ function UserPage() {
           </Grid>
           <Grid item xs={9}>
             <ul className='cards__items'>
-              {items.map((item) => {
+              {items.map((individualItem) => {
                 return  (
+                  <>
+                  <li>
                   <CardItem
-                    label={item.x}
+                    label={individualItem.x}
+                    RFID = {individualItem.RFID}
+                    active = {individualItem.status}
+                    timesUsed = {individualItem.timesUsed}
+                    text='Item Description'
                   />
+                    <Box display="flex" justifyContent="center">
+                    <Button variant="contained" color="secondary" onClick={async()=>{
+                           await api({
+                            url:'/updateDB/removeArticle',
+                            method: 'POST',
+                            data: {
+                            _id:  data._id,
+                            wardrobe_id: wardrobeId,
+                            RFID : individualItem.RFID,
+                            type : individualItem.type
+                            }
+                          })
+                          
+                          refreshAllData();
+                      }}>
+                        Delete 
+                      </Button>
+                      <Button variant="contained" color="default" onClick={async()=>{
+                        let userData = await api({
+                            url:'/updateDB/deleteWardrobe',
+                            method: 'POST',
+                            data: {
+                            wardrobe_id: individualItem._id
+                            }
+                          })
+                          refreshAllData();
+                      }}>
+                        Update 
+                      </Button>
+                    </Box>
+                      </li>
+                  </>
                   )
                 })}
           </ul> 

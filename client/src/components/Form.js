@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import FormSignUp from './FormSignUp'
 import FormSuccess from './FormSuccess'
+import { useHistory } from 'react-router-dom';
 import './Form.css'
-
 
 const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -20,9 +20,9 @@ const Form = () => {
         </div>
         {!isSubmitted ? (
           <FormSignUp submitForm={submitForm} />
-        ) : (
-          <FormSuccess />
-        )}
+        ) : 
+          console.log("here")
+        }
       </div>
         </>       
     )
