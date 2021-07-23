@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
+// const api = axios.create({
+//   baseURL: `http://localhost:1337/api/`
+// })
+
 const api = axios.create({
-  baseURL: `http://localhost:1337/api/`
+  baseURL: ` https://wardrobev3.herokuapp.com/api/`
 })
 
 const useForm = (callback, validate) => {
@@ -31,6 +35,7 @@ const useForm = (callback, validate) => {
     try{
     const response = await api({
         url:'/credentials/login',
+        mode: 'no-cors',
         method: 'POST',
         data: {
         email: values.email.toLowerCase(),

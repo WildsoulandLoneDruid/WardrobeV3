@@ -14,7 +14,7 @@ const FormSignup = ({ submitForm }) => {
     validate
   );
   
-  if (sessionId && Date.now() < sessionExpires) {
+  if (sessionId && Date.now() > sessionExpires) {
     history.push('/UserPage');
     return <div>You already have logged in</div>;
   }

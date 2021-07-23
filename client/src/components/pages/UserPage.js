@@ -14,9 +14,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { spacing } from '@material-ui/system';
 import { set } from 'mongoose'
+import ModalComponent from "../Modal";
+// const api = axios.create({
+//   baseURL: `http://localhost:1337/api/`
+// });
+
 const api = axios.create({
-  baseURL: `http://localhost:1337/api/`
-});
+  baseURL: ` https://wardrobev3.herokuapp.com/api/`
+})
 
 let newLocation = null;
 const sessionId = localStorage.getItem('sessionId');
@@ -39,6 +44,8 @@ function UserPage() {
   const [wardrobes, setWardrobes] = React.useState([]);
   const [newLocation, setNewLocation] = useState('');
   const [wardrobeId, setWardrobeId] = useState('');
+  const [wardrobeInUse, setwardrobeInUse] = useState([]);
+  const [modalIsOpen, setmodalIsOpen] = useState(false);
   function refreshAllData() {
     // Fetch all the data that you need for the page
     fetchData().then(({data:{email, fullName, wardrobe,_id}}) =>{
@@ -49,7 +56,7 @@ function UserPage() {
 
   // Refresh all data on the first page load
   useEffect(refreshAllData, []);
-
+  console.log(data._id);
   if(!sessionId || Date.now() >= sessionExpires) {
     history.push('/login');
     return <div>Please Login</div>
@@ -100,22 +107,13 @@ function UserPage() {
                       }}>
                         Delete 
                       </Button>
-                      <Button variant="contained" color="default" onClick={async()=>{
-                        let userData = await api({
-                            url:'/updateDB/deleteWardrobe',
-                            method: 'POST',
-                            data: {
-                            wardrobe_id: individualWardrobe._id
-                            }
-                          })
-                          refreshAllData();
-                      }}>
-                        Add Article 
-                      </Button>
+                      <ModalComponent wardrobe = {individualWardrobe} index = {index} id = {data._id}/>
                       <Button variant="contained" color="primary" onClick={async()=>{
                         setItems(individualWardrobe.articleData);
                         setWardrobeId(individualWardrobe._id);
-                        //try getting it to set wardrobe content
+                        setwardrobeInUse(individualWardrobe);
+                        refreshAllData();
+                        //try getting it to set wardrobe content so like setwardorbecontents
                       }}>
                         Send
                       </Button>
@@ -173,7 +171,7 @@ function UserPage() {
                   />
                     <Box display="flex" justifyContent="center">
                     <Button variant="contained" color="secondary" onClick={async()=>{
-                           await api({
+                           let temp = await api({
                             url:'/updateDB/removeArticle',
                             method: 'POST',
                             data: {
@@ -183,23 +181,11 @@ function UserPage() {
                             type : individualItem.type
                             }
                           })
-                          
+                          //setItems(wardrobeInUse.articleData);
                           refreshAllData();
                       }}>
                         Delete 
-                      </Button>
-                      <Button variant="contained" color="default" onClick={async()=>{
-                        let userData = await api({
-                            url:'/updateDB/deleteWardrobe',
-                            method: 'POST',
-                            data: {
-                            wardrobe_id: individualItem._id
-                            }
-                          })
-                          refreshAllData();
-                      }}>
-                        Update 
-                      </Button>
+                        </Button>
                     </Box>
                       </li>
                   </>
