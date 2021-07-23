@@ -9,10 +9,9 @@ import axios from 'axios';
 
 function ModalComponent(probs) {
   const [showModal, setShowModal] = useState(false);
-  const [newRFID, setnewRFID] = useState('');
-  const [newColor, setnewColor] = useState('');
-  const [newType, setnewType] = useState('');
-  const [newDesc, setnewDesc] = useState('');
+  const [newLocation, setnewLocation] = useState('');
+  const [newNumberOfShirts, setnewNumberOfShirts] = useState('');
+  const [newNumberOfPants, setnewNumberOfPants] = useState('');
 
   const api = axios.create({
     baseURL: `http://localhost:1337/api/`
@@ -25,7 +24,7 @@ function ModalComponent(probs) {
   return (
     <div key={probs.index}>
      <Button variant="contained" color="default" onClick={()=>setShowModal(true)}>
-                        Add Article
+                        Update Wardrobe 
                       </Button>
         <Box container width={1/4}>
             <Modal onRequestClose={() => setShowModal(false)} isOpen={showModal} 
@@ -57,24 +56,17 @@ function ModalComponent(probs) {
             }}
         >
             <h1>{probs.wardrobe.location}</h1>
-            <TextField fullWidth id="standard-basic" label="RFID"  value ={newRFID} onInput={e => setnewRFID(e.target.value)} />
-            <TextField fullWidth id="standard-basic" label="Color" value ={newColor} onInput={e => setnewColor(e.target.value)} />
-            <TextField fullWidth id="standard-basic" label="Type"  value ={newType} onInput={e => setnewType(e.target.value.toLowerCase())} />
-            <TextField fullWidth id="standard-basic" label="Description" value ={newDesc} onInput={e => setnewDesc(e.target.value)} />
+            <TextField fullWidth id="standard-basic" label="Location"  value ={newLocation} onInput={e => setnewLocation(e.target.value)} />
             <Grid container direction="row-reverse">
                 <Button variant="contained" color="default" onClick={async()=>
                     {
                         //console.log(probs.id)
                         let temp = await api({
-                            url:'/updateDB/addArticle',
+                            url:'/updateDB/updateWardrobe',
                             method: 'POST',
                             data: {
-                            _id:  probs.id,
                             wardrobe_id: probs.wardrobe._id,
-                            RFID : newRFID,
-                            color: newColor,
-                            type : newType,
-                            desc : newDesc
+                            location : newLocation,
                             }
                           })
                         setShowModal(false)

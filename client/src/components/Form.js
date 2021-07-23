@@ -20,8 +20,8 @@ const Form = () => {
         </div>
         {!isSubmitted ? (
           <FormSignUp submitForm={submitForm} />
-        ) : 
-          console.log("here")
+        ) :
+          <FormSuccess />
         }
       </div>
         </>       

@@ -1,7 +1,10 @@
 import React from 'react';
 import './Form.css';
+import { useHistory } from 'react-router-dom';
 
 const FormSuccess = () => {
+  const history = useHistory();
+  history.push('/Userpage');
   return (
     <div className='form-content-right'>
       <h1 className='form-success'>We have received your request!</h1>

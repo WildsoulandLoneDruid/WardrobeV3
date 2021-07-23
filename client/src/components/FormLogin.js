@@ -13,9 +13,6 @@ const initialState = {
   wardrobe: [],
 };
 
-const sessionId = localStorage.getItem('sessionId');
-const sessionExpires = Number(localStorage.getItem('sessionExpires'));
-
 
 const FormLogin = ({ submitForm }) => {
   const history = useHistory();
@@ -23,10 +20,11 @@ const FormLogin = ({ submitForm }) => {
     submitForm,
     validate
   );
-
+  const sessionId = localStorage.getItem('sessionId');
+  const sessionExpires = Number(localStorage.getItem('sessionExpires'));
   if (sessionId && Date.now() < sessionExpires) {
-    history.push('/UserPage');
-    return <div>You already have logged in</div>;
+    console.log('true')
+    history.push('/UserPage')
   }
 
   return (
@@ -59,7 +57,7 @@ const FormLogin = ({ submitForm }) => {
           />
           {errors.password && <p>{errors.password}</p>}
         </div>
-        <button className='form-input-btn' type='submit'>
+        <button className='form-input-btn' type='submit' onSubmit={handleSubmit}>
           Log in
         </button>
       </form>

@@ -16,6 +16,7 @@ function CardItem(props) {
           <div className='cards__item__info'>
             <h5 className='cards__item__text'>{props.text}</h5>
             <h5 className='cards__item__text'>RFID: {props.RFID}</h5>
+            <h5 className='cards__item__text'>Color: {props.color}</h5>
             <h5 className='cards__item__text'>Times Used: {props.timesUsed}</h5>
             <h5 className='cards__item__text'>Status: {props.active} </h5>
           </div>
