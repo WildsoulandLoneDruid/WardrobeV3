@@ -22,7 +22,7 @@ const articleData = {
     picture: { type: Number, default: 0 },
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
-    type: { type: String, enum: ['Shirt', 'Pants'], default: null},
+    type: { type: String, enum: ['shirt', 'pants'], default: null},
     status: { type: String,enum: ['A', 'NA'] ,default: 'A'}
 }
 const wardrobeData = {

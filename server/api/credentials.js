@@ -54,9 +54,10 @@ router.post('/register', async(req, res, next) => {
         //     });
         //   });
           //console.log(passwordHash);
+          primaryEmail = primaryEmail.toLowercase();
         const credentialCheck = await UserEntry.findOne({
             // I have to test to find the right index, probably email[0].primary email
-            "email.primaryEmail": primaryEmail.toLowercase()
+            "email.primaryEmail": primaryEmail
         });
         if (credentialCheck != null) {
             var error = 'User already exist';
