@@ -101,7 +101,8 @@ router.post('/addArticle', async(req, res, next) => {
             wardrobe_id,
             RFID,
             color,
-            type
+            type,
+            desc,
         } = req.body;
         let article = await UserEntry.findOne({
             "wardrobe._id":wardrobe_id
@@ -141,6 +142,7 @@ router.post('/addArticle', async(req, res, next) => {
                     RFID:RFID,
                     type: type,
                     color: color,
+                    desc: desc
                }
             }
         },{new: true,upsert:true}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {
