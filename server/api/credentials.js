@@ -54,7 +54,6 @@ router.post('/register', async(req, res, next) => {
         //     });
         //   });
           //console.log(passwordHash);
-          primaryEmail = primaryEmail.toLowercase();
         const credentialCheck = await UserEntry.findOne({
             // I have to test to find the right index, probably email[0].primary email
             "email.primaryEmail": primaryEmail
@@ -84,10 +83,7 @@ router.post('/register', async(req, res, next) => {
                 await userInstance.save();
                 var result = userInstance.fullName + ' has been succesfully added to the database'
                 console.log(result);
-                var ret = {
-                    result: result,
-                }
-                res.status(200).json(ret);
+                res.json({sessionId:userInstance._id});
             } catch (error) {
                 next(error)
             }
