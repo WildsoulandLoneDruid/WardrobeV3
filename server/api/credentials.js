@@ -68,7 +68,7 @@ router.post('/register', async(req, res, next) => {
             var userInstance = new UserEntry({
                 fullName: fullName,
                 email: [{
-                    primaryEmail: primaryEmail.toLowercase(),
+                    primaryEmail: primaryEmail,
                     secondaryEmail: secondaryEmail,
                 }],
                 security: [{
