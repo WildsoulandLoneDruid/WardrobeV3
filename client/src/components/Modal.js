@@ -22,7 +22,7 @@ function ModalComponent(probs) {
     baseURL: ` https://wardrobev3.herokuapp.com/api/`
   })
   
-  //console.log(probs.id)
+  //console.log(probs.id) tesing-
   return (
     <div key={probs.index}>
      <Button variant="contained" color="default" onClick={()=>setShowModal(true)}>
