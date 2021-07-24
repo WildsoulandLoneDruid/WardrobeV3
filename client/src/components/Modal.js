@@ -5,7 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { sizing } from '@material-ui/system';
+import ImageUploader from "react-images-upload";
 import axios from 'axios';
+import FileBase64 from 'react-file-base64';
 
 function ModalComponent(probs) {
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +15,11 @@ function ModalComponent(probs) {
   const [newColor, setnewColor] = useState('');
   const [newType, setnewType] = useState('');
   const [newDesc, setnewDesc] = useState('');
+  const [selectedFile, setselectedFile] = useState(null);
 
+  function  fileSelectedHandler (event) {
+    setselectedFile(event.target.files[0]);
+  }
   const api = axios.create({
     baseURL: `http://localhost:1337/api/`
   });
@@ -57,6 +63,10 @@ function ModalComponent(probs) {
             }}
         >
             <h1>{probs.wardrobe.location}</h1>
+            <input type="file" onChange={e => fileSelectedHandler(e)}/>
+            {/* <FileBase64
+             type="file"
+             onDone={({base64}) => setselectedFile(base64)} /> */}
             <TextField fullWidth id="standard-basic" label="RFID"  value ={newRFID} onInput={e => setnewRFID(e.target.value)} />
             <TextField fullWidth id="standard-basic" label="Color" value ={newColor} onInput={e => setnewColor(e.target.value)} />
             <TextField fullWidth id="standard-basic" label="Type"  value ={newType} onInput={e => setnewType(e.target.value.toLowerCase())} />
@@ -64,18 +74,21 @@ function ModalComponent(probs) {
             <Grid container direction="row-reverse">
                 <Button variant="contained" color="default" onClick={async()=>
                     {
-                        //console.log(probs.id)
-                        let temp = await api({
+                      var bodyFormData = new FormData();
+                      bodyFormData.append('_id',  probs.id);
+                      bodyFormData.append('wardrobe_id', probs.wardrobe._id);
+                      bodyFormData.append('RFID', newRFID);
+                      bodyFormData.append('color', newColor);
+                      bodyFormData.append('type', newType);
+                      bodyFormData.append('desc', newDesc);
+                      bodyFormData.append('picture', selectedFile);
+
+                      console.log(selectedFile)
+                            await api({
                             url:'/updateDB/addArticle',
                             method: 'POST',
-                            data: {
-                            _id:  probs.id,
-                            wardrobe_id: probs.wardrobe._id,
-                            RFID : newRFID,
-                            color: newColor,
-                            type : newType,
-                            desc : newDesc
-                            }
+                            data: bodyFormData,
+                            headers: { "Content-Type": "multipart/form-data" }
                           })
                         setShowModal(false)
                         probs.onSubmit()

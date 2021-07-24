@@ -23,6 +23,7 @@ mongoose.connect("mongodb+srv://Brewmaster123:primalsplit@wardrobedbsd2.gbx59.mo
 });
 
 app.use(morgan('common'));
+app.use('/uploads',express.static('uploads'));
 app.use(helmet());
 const corsOptions ={
     origin:'http://localhost:1337', 
@@ -40,7 +41,9 @@ app.use(cors(corsOptions
         message: 'Hello world',
     });
 });
-
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*")
+//   }) 
 app.use('/api/logs', logs);
 app.use('/api/credentials', credentials);
 app.use('/api/updateDB', updateDB);

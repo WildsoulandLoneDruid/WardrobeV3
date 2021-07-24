@@ -1,6 +1,30 @@
  
 const { Router } = require('express');
 const { listeners } = require('../models/user');
+const multer = require('multer');
+const storage = multer.diskStorage(
+    {
+        destination: function(req,file,cb){
+            cb(null,'./uploads')
+        },
+        filename: function (req, file,cb){
+            cb(null, req.body._id + req.body.wardrobe_id + file.originalname)
+        }
+    }
+)
+
+const fileFilter = (req,file,cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png')
+    {
+        cb(null,true);
+    }else
+    {
+        cb(null,false);
+    }
+
+};
+
+const upload = multer({storage: storage, limits:{fileSize: 1024 * 1024 * 5}, fileFilter: fileFilter});
 
 const UserEntry = require('../models/user');
 
@@ -8,7 +32,7 @@ const router = Router();
 
 const util = require('./util');
 
-router.post('/addWardrobe', async(req, res, next) => {
+router.post('/addWardrobe',async(req, res, next) => {
     try {
         const {
             _id,
@@ -93,9 +117,10 @@ router.post('/updateWardrobe', async(req, res, next) => {
         next(error);
     }
 });
-router.post('/addArticle', async(req, res, next) => {
+router.post('/addArticle', upload.single('picture'),async(req, res, next) => {
     try {
         /* '_id' : ''*/
+        console.log(req.file);
         const {
             _id,
             wardrobe_id,
@@ -104,6 +129,10 @@ router.post('/addArticle', async(req, res, next) => {
             type,
             desc,
         } = req.body;
+        let picture = req.file.path
+        console.log(RFID);
+        console.log("here")
+        console.log("here")
         let article = await UserEntry.findOne({
             "wardrobe._id":wardrobe_id
         }).select({wardrobe:{$elemMatch:{_id:wardrobe_id}}})
@@ -131,6 +160,7 @@ router.post('/addArticle', async(req, res, next) => {
             }
         });
         // up to here is working here
+        console.log(_id);
         await UserEntry.findOneAndUpdate({
             '_id': _id,
             'wardrobe._id': wardrobe_id
@@ -142,7 +172,8 @@ router.post('/addArticle', async(req, res, next) => {
                     RFID:RFID,
                     type: type,
                     color: color,
-                    desc: desc
+                    desc: desc,
+                    picture: picture
                }
             }
         },{new: true,upsert:true}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {

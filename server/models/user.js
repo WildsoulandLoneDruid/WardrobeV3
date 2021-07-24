@@ -19,7 +19,7 @@ const securityData = {
 }
 const articleData = {
     RFID: { type: String, default: null },
-    picture: { type: Number, default: 0 },
+    picture: {type: String},
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
     type: { type: String, enum: ['shirt', 'pants'], default: null},

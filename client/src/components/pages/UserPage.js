@@ -16,8 +16,11 @@ import { spacing } from '@material-ui/system';
 import { set } from 'mongoose'
 import ModalComponent from "../Modal";
 import ModalComponentUpdate from "../updateModal/Modal";
+
+let baseURL = `http://localhost:1337/api/`;
+let baseURL2 = `http://localhost:1337/`;
 const api = axios.create({
-  baseURL: `http://localhost:1337/api/`
+  baseURL: baseURL 
 });
 
 // const api = axios.create({
@@ -38,7 +41,6 @@ function fetchData(){
     }
   })
 } 
-let data = {};
 function UserPage() {
   const history = useHistory();
   const [selectedWardrobeId, setSelectedWardrobeId] = React.useState([]);
@@ -48,6 +50,7 @@ function UserPage() {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const sessionId = localStorage.getItem('sessionId');
   const sessionExpires = Number(localStorage.getItem('sessionExpires'));
+
   function refreshAllData() {
     // Fetch all the data that you need for the page
     fetchData().then(({data:{email, fullName, wardrobe,_id}}) =>{
@@ -130,8 +133,8 @@ function UserPage() {
                 Add Wardrobe
               </Button>
               <Button fullWidth variant="contained" color="secondary" onClick={()=>{
-                  const sessionId = localStorage.removeItem('sessionId');
-                  const sessionExpires = Number(localStorage.removeItem('sessionExpires'));
+                  localStorage.removeItem('sessionId');
+                  localStorage.removeItem('sessionExpires');
                   setSelectedWardrobeId([]);
                   setData({email:[],fullName:'',_id:''});
                   setWardrobes([]);
@@ -147,10 +150,12 @@ function UserPage() {
           <Grid item xs={9}>
             <ul className='cards__items'>
               {wardrobes.find(w=>w._id === selectedWardrobeId)?.articleData?.map((individualItem) => {
+                // console.log(individualItem.RFID);
                 return  (
                   <>
                   <li>
                   <CardItem
+                    src={baseURL2 + individualItem.picture}
                     label={individualItem.x}
                     RFID = {individualItem.RFID}
                     color = {individualItem.color}

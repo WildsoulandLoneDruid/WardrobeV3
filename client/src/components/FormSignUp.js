@@ -14,7 +14,6 @@ const FormSignup = ({ submitForm }) => {
   const sessionId = localStorage.getItem('sessionId');
   const sessionExpires = Number(localStorage.getItem('sessionExpires'));
   if (sessionId && Date.now() < sessionExpires) {
-    console.log('true')
     history.push('/UserPage')
   }
   
