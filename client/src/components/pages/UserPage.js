@@ -17,6 +17,7 @@ import { spacing } from "@material-ui/system";
 import { set } from 'mongoose'
 import ModalComponent from "../Modal";
 import ModalComponentUpdate from "../updateModal/Modal";
+import ModalArticleComponentUpdate from "../updateArticleModal/Modal";
 
 let baseURL = `http://localhost:1337/api/`;
 //let baseURL2 = `images/uploads/`;
@@ -188,21 +189,7 @@ function UserPage() {
                       }}>
                         Delete 
                       </Button>
-                      <Button variant="contained" color="default" onClick={async()=>{
-                           let temp = await api({
-                            url:'/updateDB/removeArticle',
-                            method: 'POST',
-                            data: {
-                            _id:  data._id,
-                            wardrobe_id: selectedWardrobeId,
-                            RFID : individualItem.RFID,
-                            type : individualItem.type
-                            }
-                          })
-                          refreshAllData();
-                      }}>
-                        Update 
-                      </Button>
+                      <ModalArticleComponentUpdate wardrobe = {selectedWardrobeId} id = {data._id} RFID={individualItem.RFID}/>
                     </Box>
                       </li>
                   </>

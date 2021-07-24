@@ -260,12 +260,11 @@ router.post('/updateArticle', upload.single('picture'),async(req, res, next) => 
             _id,
             wardrobe_id,
             RFID,
-            picture,
             desc,
             type,
         } = req.body;
-        let picture = req.file.path;
-        let path = picture.split("public/");
+        let picture2 = req.file.path;
+        let path2 = picture2.split("public/");
         console.log(path[1]);
         let test = await UserEntry.findOneAndUpdate({
             '_id': _id,
@@ -278,7 +277,7 @@ router.post('/updateArticle', upload.single('picture'),async(req, res, next) => 
                     'RFID' : RFID,
                     'type' : type,
                     'desc' : desc,
-                    'picture': path[1],
+                    'picture': path2[1],
                 }
                 
             }
@@ -341,7 +340,7 @@ router.post('/updateTimesUsed', async(req, res, next) => {
                         'color': article[0].articleData[0].color,
                         'type' : article[0].articleData[0].type,
                         'desc' : article[0].articleData[0].desc,
-                        'pitcure': article[0].articleData[0].picture,
+                        'picture': article[0].articleData[0].picture,
                         'timesUsed': currentTimesUsed,
                         'status':currentStatus
                     }
