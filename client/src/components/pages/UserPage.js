@@ -30,7 +30,7 @@ const api = axios.create({
 
 // const sessionId = localStorage.getItem('sessionId');
 // const sessionExpires = Number(localStorage.getItem('sessionExpires'));
-let path = '';
+let path = null
 const MyButton = styled(Button)(spacing);
 
 function fetchData(){
@@ -153,18 +153,18 @@ function UserPage() {
           <Grid item xs={9}>
             <ul className='cards__items'>
               {wardrobes.find(w=>w._id === selectedWardrobeId)?.articleData?.map((individualItem) => {
-                console.log('./' + individualItem.picture);
-                if (!(individualItem.picture == null))
-                {
-                  path = individualItem.picture.split("public/");
-                  path = path[1];
-                }
-                //console.log(path);
+                console.log(individualItem.picture);
+                // if (!(individualItem.picture == null))
+                // {
+                //   path = individualItem.picture.split("public/");
+                //   path = path[1];
+                // }
+                //console.log(path[1]);
                 return  (
                   <>
                   <li>
                   <CardItem
-                    src={path}
+                    src={individualItem.picture}
                     label={individualItem.type}
                     RFID = {individualItem.RFID}
                     color = {individualItem.color}
@@ -187,7 +187,22 @@ function UserPage() {
                           refreshAllData();
                       }}>
                         Delete 
-                        </Button>
+                      </Button>
+                      <Button variant="contained" color="default" onClick={async()=>{
+                           let temp = await api({
+                            url:'/updateDB/removeArticle',
+                            method: 'POST',
+                            data: {
+                            _id:  data._id,
+                            wardrobe_id: selectedWardrobeId,
+                            RFID : individualItem.RFID,
+                            type : individualItem.type
+                            }
+                          })
+                          refreshAllData();
+                      }}>
+                        Update 
+                      </Button>
                     </Box>
                       </li>
                   </>

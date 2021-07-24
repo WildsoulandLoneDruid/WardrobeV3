@@ -254,43 +254,50 @@ router.post('/removeArticle', async(req, res, next) => {
         next(error);
     }
 });
-// router.post('/updateArticle', async(req, res, next) => {
-//     try {
-//         const {
-//             _id,
-//             wardrobe_id,
-//             RFID,
-//             color,
-//             type
-//         } = req.body;
-//         await UserEntry.findOneAndUpdate({
-//             '_id': _id,
-//             'wardrobeData._id': wardrobe_id,
-//             'RFID': RFID
-//         }, {
-//             $set: {
-//                     'wardrobe.$.articleData':
-//                     {
-//                         color : color,
-//                         type :  type,
-//                         timesUsed : 0,
-//                     }
-//             }
-//         }).exec(function(err, docs) {
-//             if (err) {
-//                 next(err);
-//             } else {
-//                 console.log('Updated Article Wardobe: ' + docs);
-//                 res.status(200).json(docs);
-//             }
-//         });
-//     } catch (error) {
-//         if (error.name === 'Validation Error') {
-//             res.status(422);
-//         }
-//         next(error);
-//     }
-// });
+router.post('/updateArticle', upload.single('picture'),async(req, res, next) => {
+    try {
+        const {
+            _id,
+            wardrobe_id,
+            RFID,
+            picture,
+            desc,
+            type,
+        } = req.body;
+        let picture = req.file.path;
+        let path = picture.split("public/");
+        console.log(path[1]);
+        let test = await UserEntry.findOneAndUpdate({
+            '_id': _id,
+            'wardrobe._id': wardrobe_id,
+            'wardrobe.articleData.RFID': RFID
+        }, {
+            $set: {
+                'wardrobe.$.articleData':
+                {
+                    'RFID' : RFID,
+                    'type' : type,
+                    'desc' : desc,
+                    'picture': path[1],
+                }
+                
+            }
+        },{upsert:true}).sort({ 'timesUsed': "desc" })
+        .exec(function(err, docs) {
+            if (err) {
+                next(err);
+            } else {
+                console.log('Updated Article Wardobe: ' + docs);
+                res.status(200).json(docs);
+            }
+        });
+    } catch (error) {
+        if (error.name === 'Validation Error') {
+            res.status(422);
+        }
+        next(error);
+    }
+});
 router.post('/updateTimesUsed', async(req, res, next) => {
     try {
         const {
@@ -330,16 +337,17 @@ router.post('/updateTimesUsed', async(req, res, next) => {
                 $set: {
                     'wardrobe.$.articleData':
                     {
-                        'RFID' : article[0].articleData[0].RFID,
+                        'RFID' : RFID,
                         'color': article[0].articleData[0].color,
                         'type' : article[0].articleData[0].type,
                         'desc' : article[0].articleData[0].desc,
+                        'pitcure': article[0].articleData[0].picture,
                         'timesUsed': currentTimesUsed,
                         'status':currentStatus
                     }
                     
                 }
-            }).sort({ 'timesUsed': "desc" })
+            },{upsert:true}).sort({ 'timesUsed': "desc" })
             .exec(function(err, docs) {
                 if (err) {
                     next(err);
