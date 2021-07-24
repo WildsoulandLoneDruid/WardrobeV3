@@ -23,9 +23,9 @@ function ModalComponent(probs) {
   const api = axios.create({
     baseURL: `http://localhost:1337/api/`
   });
-//   const api = axios.create({
-//     baseURL: ` https://wardrobev3.herokuapp.com/api/`
-//   })
+  // const api = axios.create({
+  //   baseURL: ` https://wardrobev3.herokuapp.com/api/`
+  // })
   
   //console.log(probs.id) tesing-
   return (

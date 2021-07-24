@@ -22,7 +22,7 @@ let baseURL2 = `http://localhost:1337/`;
 const api = axios.create({
   baseURL: baseURL 
 });
-
+// let baseURL2 = `http://localhost:1337/`;
 // const api = axios.create({
 //   baseURL: ` https://wardrobev3.herokuapp.com/api/`
 // })
