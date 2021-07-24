@@ -12,7 +12,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { spacing } from '@material-ui/system';
+import { styled } from "@material-ui/core/styles";
+import { spacing } from "@material-ui/system";
 import { set } from 'mongoose'
 import ModalComponent from "../Modal";
 import ModalComponentUpdate from "../updateModal/Modal";
@@ -30,6 +31,7 @@ const api = axios.create({
 // const sessionId = localStorage.getItem('sessionId');
 // const sessionExpires = Number(localStorage.getItem('sessionExpires'));
 let path = '';
+const MyButton = styled(Button)(spacing);
 
 function fetchData(){
   const sessionId = localStorage.getItem('sessionId');
@@ -83,8 +85,8 @@ function UserPage() {
                     <Typography align ="left">Number Of Shirts : {individualWardrobe.totalNumberOfShirts}</Typography>
                     <Typography align ="left">Number Of Pants : {individualWardrobe.totalNumberOfPants}</Typography>
                     <Typography align ="left">Number Of Articles : {individualWardrobe.totalNumberOfArticles}</Typography>
-                    <Grid container direction="row" alignContent="flex-start" justify="space-between">
-                      <Button variant="contained" color="secondary" onClick={async()=>{
+                    <Grid container direction="row" alignContent="flex-start" justify="space-between" >
+                      <Button variant="contained" color="secondary" mt={2} onClick={async()=>{
                         let userData = await api({
                             url:'/updateDB/deleteWardrobe',
                             method: 'POST',
