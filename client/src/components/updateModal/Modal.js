@@ -10,7 +10,7 @@ import axios from 'axios';
 function ModalComponent(probs) {
   const [showModal, setShowModal] = useState(false);
   const [newLocation, setnewLocation] = useState('');
-  const [newNumberOfShirts, setnewNumberOfShirts] = useState('');
+  const [description, setdescription] = useState('');
   const [newNumberOfPants, setnewNumberOfPants] = useState('');
 
   const api = axios.create({
@@ -57,6 +57,7 @@ function ModalComponent(probs) {
         >
             <h1>{probs.wardrobe.location}</h1>
             <TextField fullWidth id="standard-basic" label="Location"  value ={newLocation} onInput={e => setnewLocation(e.target.value)} />
+   
             <Grid container direction="row-reverse">
                 <Button variant="contained" color="default" onClick={async()=>
                     {

@@ -5,7 +5,7 @@ const multer = require('multer');
 const storage = multer.diskStorage(
     {
         destination: function(req,file,cb){
-            cb(null,'./uploads')
+            cb(null,'./client/public/images/uploads')
         },
         filename: function (req, file,cb){
             cb(null, req.body._id + req.body.wardrobe_id + file.originalname)
@@ -129,10 +129,11 @@ router.post('/addArticle', upload.single('picture'),async(req, res, next) => {
             type,
             desc,
         } = req.body;
-        let picture = req.file.path
-        console.log(RFID);
-        console.log("here")
-        console.log("here")
+        //splice herre
+        let picture = req.file.path;
+        let path = picture.split("public/");
+        console.log(path[1]);
+  
         let article = await UserEntry.findOne({
             "wardrobe._id":wardrobe_id
         }).select({wardrobe:{$elemMatch:{_id:wardrobe_id}}})
@@ -173,7 +174,7 @@ router.post('/addArticle', upload.single('picture'),async(req, res, next) => {
                     type: type,
                     color: color,
                     desc: desc,
-                    picture: picture
+                    picture: path[1]
                }
             }
         },{new: true,upsert:true}).sort({ 'timesUsed': "desc" }).exec(function(err, docs) {
@@ -307,28 +308,36 @@ router.post('/updateTimesUsed', async(req, res, next) => {
         }
         // yup and all to be able to extract the data, I played with it for a while and this is what worked
         article = article.toObject().wardrobe;
-        let currentStatus = article[0].articleData[0].status;      
+        let currentStatus = article[0].articleData[0].status;    
+        console.log(currentStatus + ' ' + currentTimesUsed);
         if (currentStatus == 'A')
         {
-            currentStatus == 'NA';
+            currentStatus = 'NA';
             currentTimesUsed = article[0].articleData[0].timesUsed + 1;
         } 
         else
         {
-            currentStatus == 'A';
+            currentStatus = 'A';
             currentTimesUsed = article[0].articleData[0].timesUsed;
         }
-        await UserEntry.findOneAndUpdate({
+        console.log(currentStatus + ' ' + currentTimesUsed);
+        console.log(_id + ' ' + wardrobe_id + ' ' + RFID);
+        let test = await UserEntry.findOneAndUpdate({
                 '_id': _id,
-                'wardrobeData._id': wardrobe_id,
-                'RFID': RFID
+                'wardrobe._id': wardrobe_id,
+                'wardrobe.articleData.RFID': RFID
             }, {
                 $set: {
                     'wardrobe.$.articleData':
                     {
-                        timesUsed: currentTimesUsed,
-                        status: currentStatus
+                        'RFID' : article[0].articleData[0].RFID,
+                        'color': article[0].articleData[0].color,
+                        'type' : article[0].articleData[0].type,
+                        'desc' : article[0].articleData[0].desc,
+                        'timesUsed': currentTimesUsed,
+                        'status':currentStatus
                     }
+                    
                 }
             }).sort({ 'timesUsed': "desc" })
             .exec(function(err, docs) {
@@ -339,6 +348,7 @@ router.post('/updateTimesUsed', async(req, res, next) => {
                     res.status(200).json(docs);
                 }
             });
+            console.log('article : ' + test);
     } catch (error) {
         if (error.name === 'Validation Error') {
             res.status(422);

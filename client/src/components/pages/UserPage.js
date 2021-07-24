@@ -18,7 +18,7 @@ import ModalComponent from "../Modal";
 import ModalComponentUpdate from "../updateModal/Modal";
 
 let baseURL = `http://localhost:1337/api/`;
-let baseURL2 = `http://localhost:1337/`;
+//let baseURL2 = `images/uploads/`;
 const api = axios.create({
   baseURL: baseURL 
 });
@@ -29,6 +29,7 @@ const api = axios.create({
 
 // const sessionId = localStorage.getItem('sessionId');
 // const sessionExpires = Number(localStorage.getItem('sessionExpires'));
+let path = '';
 
 function fetchData(){
   const sessionId = localStorage.getItem('sessionId');
@@ -150,13 +151,19 @@ function UserPage() {
           <Grid item xs={9}>
             <ul className='cards__items'>
               {wardrobes.find(w=>w._id === selectedWardrobeId)?.articleData?.map((individualItem) => {
-                // console.log(individualItem.RFID);
+                console.log('./' + individualItem.picture);
+                if (!(individualItem.picture == null))
+                {
+                  path = individualItem.picture.split("public/");
+                  path = path[1];
+                }
+                //console.log(path);
                 return  (
                   <>
                   <li>
                   <CardItem
-                    src={baseURL2 + individualItem.picture}
-                    label={individualItem.x}
+                    src={path}
+                    label={individualItem.type}
                     RFID = {individualItem.RFID}
                     color = {individualItem.color}
                     active = {individualItem.status}
