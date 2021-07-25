@@ -1,5 +1,5 @@
 import React from 'react';
-import './Cards.css';
+import './cards.css';
 import CardItem from './serviceCardItem';
 
 function serviceCards() {

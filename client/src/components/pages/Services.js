@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../App.css'
-import Footer from '../Footer.js'
-import NavBar from '../NavBar.js'
+import Footer from '../footer.js'
+import NavBar from '../navBar.js'
 import CardServices from '../serviceCards.js'
 
 function Services() {

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import validate from './validateInfo';
 import useForm from './useForm';
-import './Form.css';
+import './form.css';
 
 const initialState = {
   _id: "",

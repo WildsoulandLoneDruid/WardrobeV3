@@ -2,7 +2,7 @@ import React from 'react';
 import validate from './validateInfo';
 import useForm from './useFormSignup';
 import { Link, useHistory} from 'react-router-dom';
-import './Form.css';
+import './form.css';
 
 
 const FormSignup = ({ submitForm }) => {

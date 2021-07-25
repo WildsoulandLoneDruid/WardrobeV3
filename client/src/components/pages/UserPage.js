@@ -1,8 +1,8 @@
 import React, {useEffect,useState} from 'react'
 import '../../App.css'
-import Footer from '../Footer.js'
-import UserPageButton from '../UserpageButtons/UserPageButton'
-import NavBar from '../NavBar.js'
+import Footer from '../footer.js'
+import UserPageButton from '../UserpageButtons/userPageButton'
+import NavBar from '../navBar.js'
 import CardItem from '../serviceCardItem.js'
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
@@ -15,9 +15,9 @@ import TextField from '@material-ui/core/TextField';
 import { styled } from "@material-ui/core/styles";
 import { spacing } from "@material-ui/system";
 import { set } from 'mongoose'
-import ModalComponent from "../Modal.js";
-import ModalComponentUpdate from "../updateModal/Modal.js";
-import ModalArticleComponentUpdate from "../updateArticleModal/Modal.js";
+import ModalComponent from "../modal.js";
+import ModalComponentUpdate from "../updateModal/modal.js";
+import ModalArticleComponentUpdate from "../updateArticleModal/modal.js";
 
 let baseURL = `http://localhost:1337/api/`;
 //let baseURL2 = `images/uploads/`;

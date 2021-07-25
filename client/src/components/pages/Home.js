@@ -1,8 +1,8 @@
 import React from 'react'
 import '../../App.css'
-import Footer from '../Footer.js'
-import MainScreenSection from '../MainScreen.js'
-import NavBar from '../NavBar.js'
+import Footer from '../footer.js'
+import MainScreenSection from '../mainScreen.js'
+import NavBar from '../navBar.js'
 
 function Home() {
     return (

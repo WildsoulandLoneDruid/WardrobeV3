@@ -3,12 +3,12 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './components/pages/Home.js'
-import Services from './components/pages/Services.js'
-import About from './components/pages/About.js'
-import Signed_Up from './components/pages/Sign_up.js'
-import Login from './components/pages/Login.js'
-import UserPage from './components/pages/UserPage.js'
+import Home from './components/pages/home.js'
+import Services from './components/pages/services.js'
+import About from './components/pages/about.js'
+import Signed_Up from './components/pages/sign_up.js'
+import Login from './components/pages/login.js'
+import UserPage from './components/pages/userPage.js'
 
 
 /* import router  npm install react-bootstrap bootstrap@4.6.0

@@ -1,8 +1,8 @@
 import React from 'react'
 import '../../App.css'
-import Form from '../Form.js'
-import Footer from '../Footer.js'
-import NavBar from '../NavBar.js'
+import Form from '../form.js'
+import Footer from '../footer.js'
+import NavBar from '../navBar.js'
 
 function SignIn() {
     return (

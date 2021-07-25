@@ -1,5 +1,5 @@
 import React from 'react';
-import './Form.css';
+import './form.css';
 import { useHistory } from 'react-router-dom';
 
 const FormSuccess = () => {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
-import FormLogin from './FormLogin.js'
-import FormSuccess from './FormSuccess'
-import './Form.css'
+import FormLogin from './formLogin.js'
+import FormSuccess from './formSuccess'
+import './form.css'
 
 
 const Form = () => {

@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import FormSignUp from './FormSignUp'
-import FormSuccess from './FormSuccess'
+import FormSignUp from './formSignUp'
+import FormSuccess from './formSuccess'
 import { useHistory } from 'react-router-dom';
-import './Form.css'
+import './form.css'
 
 const Form = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
