@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
 import { Link } from 'react-router-dom';
-import './NavBar.css'
+import './nav-bar.css'
 
 function Navbar(probs) {
   const [click, setClick] = useState(false);
@@ -29,7 +29,7 @@ function Navbar(probs) {
       <nav className='navbar'>
         <div className='navbar-container'>
           <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
-            WIS
+            PWA
             <i class='fab fa-typo3' />
           </Link>
           <div className='menu-icon' onClick={handleClick}>
