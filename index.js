@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 require('dotenv').config();
 //fuck this 
@@ -36,14 +37,10 @@ app.use(cors(corsOptions
     app.use(express.json());
     app.use(cookieParser('test'))
     
-    app.get('/', (res, req) => {
-        res.json({
-        message: 'Hello world',
-    });
-});
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*")
-//   }) 
+
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'client/build')))
+
 app.use('/api/logs', logs);
 app.use('/api/credentials', credentials);
 app.use('/api/updateDB', updateDB);

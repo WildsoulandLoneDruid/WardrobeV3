@@ -174,6 +174,8 @@ function UserPage() {
                     text={individualItem.desc}
                   />
                     <Box display="flex" justifyContent="center">
+                    <ModalArticleComponentUpdate id = {data._id} wardrobe = {selectedWardrobeId} RFID = {individualItem.RFID} onSubmit={()=>{
+                        refreshAllData();}}/>
                     <Button variant="contained" color="secondary" onClick={async()=>{
                            let temp = await api({
                             url:'/updateDB/removeArticle',
@@ -189,7 +191,7 @@ function UserPage() {
                       }}>
                         Delete 
                       </Button>
-                      <ModalArticleComponentUpdate wardrobe = {selectedWardrobeId} id = {data._id} RFID={individualItem.RFID}/>
+                      {/* <ModalArticleComponentUpdate wardrobe = {selectedWardrobeId} id = {data._id} RFID={individualItem.RFID}/> */}
                     </Box>
                       </li>
                   </>

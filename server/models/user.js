@@ -8,18 +8,13 @@ const requiredString = {
 }
 const emailData = {
     primaryEmail: { type: String, default: null },
-    secondaryEmail: { type: String, default: null },
 }
 const securityData = {
     password: { type: String },
-    securityQuestion1: { type: String, default: null },
-    securityQuestion1Answer: { type: String, default: null },
-    securityQuestion2: { type: String, default: null },
-    securityQuestion2Answer: { type: String, default: null },
 }
 const articleData = {
     RFID: { type: String, default: null },
-    picture: {type: String},
+    picture: {type: String, default: null},
     timesUsed: { type: Number, default: 0 },
     color: { type: String, default: null },
     type: { type: String, enum: ['shirt', 'pants'], default: null},

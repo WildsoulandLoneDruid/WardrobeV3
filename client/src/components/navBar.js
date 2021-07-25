@@ -59,7 +59,7 @@ function Navbar(probs) {
                 About us
               </Link>
             </li>
-            <li>
+            <li className='nav-item'>
               {probs.flag ? <Link
                 to='/UserPage'
                 className='nav-links'

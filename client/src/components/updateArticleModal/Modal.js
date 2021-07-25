@@ -72,9 +72,9 @@ function ModalComponent(probs) {
                         bodyFormData.append('type', newType);
                         bodyFormData.append('desc', newDesc);
                         bodyFormData.append('picture', selectedFile);
-                        //console.log(probs.id)
+                        //console.log(bodyFormData.get('_id'));
                         let temp = await api({
-                            url:'/updateDB/updateWardrobe',
+                            url:'/updateDB/updateArticle',
                             method: 'POST',
                             data: bodyFormData,
                             headers: { "Content-Type": "multipart/form-data" }

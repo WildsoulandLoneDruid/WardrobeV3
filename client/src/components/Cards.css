@@ -37,6 +37,7 @@ h5{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  list-style-type: none;
 }
 .cards__item {
   list-style: none;
