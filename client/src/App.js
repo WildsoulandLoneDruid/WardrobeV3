@@ -3,7 +3,7 @@
 import React from 'react';
 import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './components/pages/home.js'
+import Home from './components/pages/home'
 import Services from './components/pages/services.js'
 import About from './components/pages/about.js'
 import Signed_Up from './components/pages/sign_up.js'
