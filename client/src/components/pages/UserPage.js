@@ -19,15 +19,15 @@ import ModalComponent from "../modal.js";
 import ModalComponentUpdate from "../updateModal/modal.js";
 import ModalArticleComponentUpdate from "../updateArticleModal/modal.js";
 
-let baseURL = `http://localhost:1337/api/`;
-//let baseURL2 = `images/uploads/`;
-const api = axios.create({
-  baseURL: baseURL 
-});
-// let baseURL2 = `http://localhost:1337/`;
+// let baseURL = `http://localhost:1337/api/`;
+// //let baseURL2 = `images/uploads/`;
 // const api = axios.create({
-//   baseURL: ` https://wardrobev3.herokuapp.com/api/`
-// })
+//   baseURL: baseURL 
+// });
+let baseURL2 = `http://localhost:1337/`;
+const api = axios.create({
+  baseURL: ` https://wardrobev3.herokuapp.com/api/`
+})
 
 // const sessionId = localStorage.getItem('sessionId');
 // const sessionExpires = Number(localStorage.getItem('sessionExpires'));

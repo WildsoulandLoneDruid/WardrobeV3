@@ -74,6 +74,7 @@ function ModalComponent(probs) {
             <Grid container direction="row-reverse">
                 <Button variant="contained" color="default" onClick={async()=>
                     {
+                      console.log(selectedFile);
                       var bodyFormData = new FormData();
                       bodyFormData.append('_id',  probs.id);
                       bodyFormData.append('wardrobe_id', probs.wardrobe._id);

@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: `http://localhost:1337/api/`
-})
-
 // const api = axios.create({
-//   baseURL: ` https://wardrobev3.herokuapp.com/api/`
+//   baseURL: `http://localhost:1337/api/`
 // })
+
+const api = axios.create({
+  baseURL: ` https://wardrobev3.herokuapp.com/api/`
+})
 
 const useForm = (callback, validate) => {
   const [values, setValues] = useState({

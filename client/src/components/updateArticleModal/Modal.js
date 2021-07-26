@@ -16,12 +16,12 @@ function ModalComponent(probs) {
   function  fileSelectedHandler (event) {
     setselectedFile(event.target.files[0]);
   }
+  // const api = axios.create({
+  //   baseURL: `http://localhost:1337/api/`
+  // });
   const api = axios.create({
-    baseURL: `http://localhost:1337/api/`
-  });
-//   const api = axios.create({
-//     baseURL: ` https://wardrobev3.herokuapp.com/api/`
-//   })
+    baseURL: ` https://wardrobev3.herokuapp.com/api/`
+  })
   
   //console.log(probs.id) tesing-
   return (

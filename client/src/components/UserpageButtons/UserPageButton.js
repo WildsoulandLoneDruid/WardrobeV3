@@ -8,10 +8,12 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-const api = axios.create({
-    baseURL: `http://localhost:1337/api/`
-  });
-
+// const api = axios.create({
+//     baseURL: `http://localhost:1337/api/`
+//   });
+  const api = axios.create({
+    baseURL: ` https://wardrobev3.herokuapp.com/api/`
+  })
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,

@@ -13,12 +13,12 @@ function ModalComponent(probs) {
   const [description, setdescription] = useState('');
   const [newNumberOfPants, setnewNumberOfPants] = useState('');
 
+  // const api = axios.create({
+  //   baseURL: `http://localhost:1337/api/`
+  // });
   const api = axios.create({
-    baseURL: `http://localhost:1337/api/`
-  });
-//   const api = axios.create({
-//     baseURL: ` https://wardrobev3.herokuapp.com/api/`
-//   })
+    baseURL: ` https://wardrobev3.herokuapp.com/api/`
+  })
   
   //console.log(probs.id) tesing-
   return (

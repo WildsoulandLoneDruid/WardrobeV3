@@ -16,7 +16,6 @@ const Form = () => {
         <div className='form-container'>
         <span className='close-btn'>×</span>
         <div className='form-content-left'>
-          <img className='form-img' src='images/img-2.jpg' alt='spaceship' />
         </div>
         {!isSubmitted ? (
           <FormLogin submitForm={submitForm} />

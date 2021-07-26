@@ -8,7 +8,7 @@ const storage = multer.diskStorage(
             cb(null,'./client/public/images/uploads')
         },
         filename: function (req, file,cb){
-            cb(null, req.body._id + req.body.wardrobe_id + file.originalname)
+            cb(null,file.originalname)
         }
     }
 )
@@ -131,6 +131,7 @@ router.post('/addArticle', upload.single('picture'),async(req, res, next) => {
         } = req.body;
         //splice herre
         let picture = req.file.path;
+        console.log(picture);
         let path = picture.split("public/");
         console.log(path[1]);
   
